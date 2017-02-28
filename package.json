@@ -5,7 +5,8 @@
   "main": "./lib/realmReduxSnapshotMiddleware.js",
   "scripts": {
     "eslint": "eslint src",
-    "compile": "babel -d lib src"
+    "compile": "babel -d lib src",
+    "prepublish": "npm run compile"
   },
   "repository": "https://github.com/sargant/realm-redux-snapshot-middleware",
   "author": "Robert Sargant",
