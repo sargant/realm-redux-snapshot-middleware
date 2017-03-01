@@ -1,5 +1,8 @@
 # realm-redux-snapshot-middleware
 
+[![Travis](https://img.shields.io/travis/sargant/realm-redux-snapshot-middleware.svg?style=flat-square)](https://travis-ci.org/sargant/realm-redux-snapshot-middleware)
+[![npm](https://img.shields.io/npm/v/realm-redux-snapshot-middleware.svg?style=flat-square)](https://www.npmjs.com/package/realm-redux-snapshot-middleware)
+
 Simple redux middleware that converts the payload of an action with a type of `Realm.Results` (or an object with some values of type `Relam.Results`) into a plain javascript object. Recursively converts all instances of `Realm.Object` and `Realm.List` into native objects and arrays.
 
 **Note: realm-redux-snapshot-middleware expects an [FSA-compliant](https://github.com/acdlite/flux-standard-action/blob/master/README.md) action, and will only convert the `payload`**
