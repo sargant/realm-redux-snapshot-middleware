@@ -1,6 +1,7 @@
 src
 yarn.lock
+realm-object-server
+.testRealm
 .babelrc
 .eslintrc
 .gitignore
-
