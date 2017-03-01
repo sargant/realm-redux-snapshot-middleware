@@ -48,15 +48,17 @@ const snapshotRealmObject = (object) => {
   }
 
   // Unpack the Realm.Object into a simple object
-  let unpackedObject = { ...object }
+  let unpackedObject = {}
 
   // For each of its values, check if any are instances of Realm.Object
   // or Realm.List, and convert them recursively
-  Object.keys(unpackedObject).forEach(key => {
-    if (unpackedObject[key].constructor === RealmObject) {
-      unpackedObject[key] = snapshotRealmObject(unpackedObject[key])
-    } else if (unpackedObject[key].constructor === RealmList) {
-      unpackedObject[key] = unpackedObject[key].map(x => snapshotRealmObject(x))
+  Object.keys(object).forEach((key) => {
+    if (object[key].constructor === RealmObject) {
+      unpackedObject[key] = snapshotRealmObject(object[key])
+    } else if (object[key].constructor === RealmList) {
+      unpackedObject[key] = object[key].map(x => snapshotRealmObject(x))
+    } else {
+      unpackedObject[key] = object[key]
     }
   })
 

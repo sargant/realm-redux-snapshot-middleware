@@ -1,10 +1,11 @@
 {
   "name": "realm-redux-snapshot-middleware",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Redux middleware that converts action payloads from Realm.Results to simple javascript objects",
   "main": "./lib/realmReduxSnapshotMiddleware.js",
   "scripts": {
     "eslint": "eslint src",
+    "test": "mocha --compilers js:babel-core/register test",
     "compile": "babel -d lib src",
     "prepublish": "npm run compile"
   },
@@ -12,12 +13,16 @@
   "author": "Robert Sargant",
   "license": "MIT",
   "devDependencies": {
-    "babel-preset-es2015": "^6.22.0",
+    "babel-core": "^6.23.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-es2015": "^6.22.0",
+    "chai": "^3.5.0",
     "eslint": "^3.16.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.4.2",
-    "eslint-plugin-standard": "^2.0.1"
+    "eslint-plugin-standard": "^2.0.1",
+    "mocha": "^3.2.0",
+    "rimraf": "^2.6.1"
   },
   "dependencies": {
     "realm": "^1.0.2"
