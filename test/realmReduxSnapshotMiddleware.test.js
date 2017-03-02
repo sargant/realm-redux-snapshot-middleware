@@ -142,17 +142,25 @@ describe('realmReduxSnapshot', () => {
     expect(result.payload.constructor).to.equal(Array)
   })
 
-  it('should change the values of a payload object from Realm.Results to Arrays', () => {
+  it('should change a payload of Realm.Object to a plain object', () => {
+    let dog = testRealm().objects('Dog')[0]
+    let initialAction = { type: 'TEST', payload: dog }
+    let result = testMiddleware(initialAction)
+    expect(result.payload.constructor).to.not.equal(Realm.Object)
+    expect(result.payload.constructor).to.equal(Object)
+  })
+
+  it('should change the values within a payload object', () => {
     let dogs = testRealm().objects('Dog')
-    let cats = testRealm().objects('Cat')
+    let cat = testRealm().objects('Cat')[0]
     let bird = { name: 'A bird' }
-    let initialAction = { type: 'TEST', payload: { dogs, cats, bird } }
+    let initialAction = { type: 'TEST', payload: { dogs, cat, bird } }
     let result = testMiddleware(initialAction)
     expect(result.payload.constructor).to.equal(Object)
     expect(result.payload.dogs.constructor).to.not.equal(Realm.Results)
     expect(result.payload.dogs.constructor).to.equal(Array)
-    expect(result.payload.cats.constructor).to.not.equal(Realm.Results)
-    expect(result.payload.cats.constructor).to.equal(Array)
+    expect(result.payload.cat.constructor).to.not.equal(Realm.Object)
+    expect(result.payload.cat.constructor).to.equal(Object)
     expect(result.payload.bird.constructor).to.equal(Object)
   })
 
