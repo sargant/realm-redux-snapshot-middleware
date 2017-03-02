@@ -34,6 +34,22 @@ const testRealm = () => {
           name: 'string',
           cats: { type: 'list', objectType: 'Cat', default: [] }
         }
+      },
+      {
+        name: 'CircularRefParent',
+        primaryKey: 'id',
+        properties: {
+          id: 'int',
+          child: 'CircularRefChild'
+        }
+      },
+      {
+        name: 'CircularRefChild',
+        primaryKey: 'id',
+        properties: {
+          id: 'int',
+          parent: 'CircularRefParent'
+        }
       }
     ]
   })
@@ -70,6 +86,10 @@ const initRealm = () => {
       name: 'Molly',
       cats: [cat1, cat2]
     })
+
+    let parent = realm.create('CircularRefParent', { id: 1 })
+    let child = realm.create('CircularRefChild', { id: 2, parent })
+    realm.create('CircularRefParent', { id: 1, child }, true)
   })
 }
 
@@ -236,5 +256,40 @@ describe('realmReduxSnapshot', () => {
         }
       ]
     })
+  })
+
+  it('should handle circular references', () => {
+    let circularParent = testRealm().objects('CircularRefParent')
+    let initialAction = { type: 'TEST', payload: circularParent }
+    // No assertions - just testing it doesn't crash
+    testMiddleware(initialAction)
+  })
+
+  it('should correctly map circular references with a depth of 0', () => {
+    let circularParent = testRealm().objects('CircularRefParent')
+    let initialAction = { type: 'TEST', payload: circularParent }
+    let result = realmReduxSnapshot({ maxDepth: 0 })()(x => x)(initialAction)
+    expect(result.payload).to.deep.equal([{ id: 1, child: undefined }])
+  })
+
+  it('should correctly map circular references with a depth of 1', () => {
+    let circularParent = testRealm().objects('CircularRefParent')
+    let initialAction = { type: 'TEST', payload: circularParent }
+    let result = realmReduxSnapshot({ maxDepth: 1 })()(x => x)(initialAction)
+    expect(result.payload).to.deep.equal([{ id: 1, child: { id: 2, parent: undefined } }])
+  })
+
+  it('should correctly map circular references with a depth of 2', () => {
+    let circularParent = testRealm().objects('CircularRefParent')
+    let initialAction = { type: 'TEST', payload: circularParent }
+    let result = realmReduxSnapshot({ maxDepth: 2 })()(x => x)(initialAction)
+    expect(result.payload).to.deep.equal([{ id: 1, child: { id: 2, parent: { id: 1, child: undefined } } }])
+  })
+
+  it('should correctly map circular references with a depth of 4', () => {
+    let circularParent = testRealm().objects('CircularRefParent')
+    let initialAction = { type: 'TEST', payload: circularParent }
+    let result = realmReduxSnapshot({ maxDepth: 4 })()(x => x)(initialAction)
+    expect(result.payload).to.deep.equal([{ id: 1, child: { id: 2, parent: { id: 1, child: { id: 2, parent: { id: 1, child: undefined } } } } }])
   })
 })
