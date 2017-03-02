@@ -1,3 +1,4 @@
+import { isFSA } from 'flux-standard-action'
 import {
   Results as RealmResults,
   Object as RealmObject,
@@ -9,12 +10,15 @@ import {
  * instance, or an object with any values that are Realm.Results instances, to
  * a simple object
  */
-const realmReduxSnapshot = () => (next) => (action) => {
-  // if there is no payload on the action, do nothing
-  // we expect an FSA-compliant action
-  if (!action || !action.payload) {
-    return next(action)
+const realmReduxSnapshot = () => (next) => (initialAction) => {
+  // If the action is not FSA-compliant or it has no payload,
+  // take no action
+  if (!isFSA(initialAction) || !initialAction.payload) {
+    return next(initialAction)
   }
+
+  // Make a shallow clone of the action to avoid mutating the original
+  let action = { ...initialAction }
 
   // If the payload is a Realm.Results instance, convert into an array,
   // with each value converted to a basic object

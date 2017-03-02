@@ -5,7 +5,7 @@ import rimraf from 'rimraf'
 import fs from 'fs'
 import Realm from 'realm'
 
-const { describe, it, before, after } = Mocha
+const { describe, it, before } = Mocha
 const { expect } = Chai
 
 const testRealm = () => {
@@ -80,27 +80,33 @@ describe('realmReduxSnapshot', () => {
     initRealm()
   })
 
-  after(() => {
-    rimraf.sync('.testRealm')
-  })
-
-  it('should not mutate the action if it does not have a payload', () => {
+  it('should not change an empty object', () => {
     let initialAction = {}
     let result = realmReduxSnapshot()(x => x)(initialAction)
     expect(result).to.equal(initialAction)
   })
 
-  it('should not change the action if it has a payload of type string', () => {
-    let initialAction = { type: 'TEST', payload: 'some string' }
+  it('should not change a non-FSA compliant action', () => {
+    let initialAction = { hello: 'world' }
     let result = realmReduxSnapshot()(x => x)(initialAction)
     expect(result).to.equal(initialAction)
+  })
+
+  it('should not change an action with no payload', () => {
+    let initialAction = { type: 'TEST' }
+    let result = realmReduxSnapshot()(x => x)(initialAction)
+    expect(result).to.equal(initialAction)
+  })
+
+  it('should not change the the payload if it is a string', () => {
+    let initialAction = { type: 'TEST', payload: 'some string' }
+    let result = realmReduxSnapshot()(x => x)(initialAction)
     expect(result).to.deep.equal(initialAction)
   })
 
-  it('should not change the action if it has a payload of type object', () => {
+  it('should not change the payload if it is a basic object', () => {
     let initialAction = { type: 'TEST', payload: {} }
     let result = realmReduxSnapshot()(x => x)(initialAction)
-    expect(result).to.equal(initialAction)
     expect(result).to.deep.equal(initialAction)
   })
 

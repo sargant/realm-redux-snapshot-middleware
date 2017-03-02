@@ -26,6 +26,7 @@
     "rimraf": "^2.6.1"
   },
   "dependencies": {
+    "flux-standard-action": "^1.2.0",
     "realm": "^1.0.2"
   }
 }
