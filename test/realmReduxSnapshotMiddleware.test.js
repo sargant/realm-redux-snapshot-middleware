@@ -76,7 +76,7 @@ const initRealm = () => {
 describe('realmReduxSnapshot', () => {
   // Create an instance of realm redux snapshot that passes an empty store
   // and has a next parameter that simply returns the action
-  const testMiddleware = (action) => realmReduxSnapshot({})(x => x)(action)
+  const testMiddleware = (action) => realmReduxSnapshot()({})(x => x)(action)
 
   before(() => {
     rimraf.sync('.testRealm')

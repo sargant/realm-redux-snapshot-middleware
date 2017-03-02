@@ -10,7 +10,7 @@ import {
  * instance, or an object with any values that are Realm.Results instances, to
  * a simple object
  */
-const realmReduxSnapshot = () => (next) => (initialAction) => {
+const realmReduxSnapshot = (config) => () => (next) => (initialAction) => {
   // If the action is not FSA-compliant or it has no payload,
   // take no action
   if (!isFSA(initialAction) || !initialAction.payload) {

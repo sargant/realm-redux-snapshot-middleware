@@ -16,7 +16,7 @@ import realmReduxSnapshotMiddleware from 'realm-redux-snapshot-middleware'
 
 const middleware = [
   ...otherMiddleware,
-  realmReduxSnapshotMiddleware
+  realmReduxSnapshotMiddleware()
 ]
 
 createStore(
