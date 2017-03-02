@@ -156,6 +156,17 @@ describe('realmReduxSnapshot', () => {
     expect(result.payload.bird.constructor).to.equal(Object)
   })
 
+  it('should work with objects with some keys undefined or null', () => {
+    let dogs = testRealm().objects('Dog')
+    let initialAction = { type: 'TEST', payload: { dogs, birds: undefined, turtles: null } }
+    let result = testMiddleware(initialAction)
+    expect(result.payload.constructor).to.equal(Object)
+    expect(result.payload.dogs.constructor).to.not.equal(Realm.Results)
+    expect(result.payload.dogs.constructor).to.equal(Array)
+    expect(result.payload.birds).to.equal(undefined)
+    expect(result.payload.turtles).to.equal(null)
+  })
+
   it('should convert an individual result from Realm.Object to an Object', () => {
     let dogs = testRealm().objects('Dog').filtered('name == "Rex"')
     let initialAction = { type: 'TEST', payload: { dogs } }

@@ -32,7 +32,7 @@ const realmReduxSnapshot = (incomingConfig) => () => (next) => (initialAction) =
 
   // If the payload is a Realm.Results instance, convert into an array,
   // with each value converted to a basic object
-  if (action.payload.constructor === RealmResults) {
+  if (action.payload && action.payload.constructor === RealmResults) {
     action.payload = action.payload.map(x => snapshotRealmObject(x, 0, config.maxDepth))
 
   // If the payload is an object instance, loop through all its values.
@@ -40,7 +40,7 @@ const realmReduxSnapshot = (incomingConfig) => () => (next) => (initialAction) =
   // them into a simple array, with each value converted to a basic object
   } else if (action.payload.constructor === Object) {
     Object.keys(action.payload).forEach(key => {
-      if (action.payload[key].constructor === RealmResults) {
+      if (action.payload[key] && action.payload[key].constructor === RealmResults) {
         action.payload[key] = action.payload[key].map(x => snapshotRealmObject(x, 0, config.maxDepth))
       }
     })
@@ -72,9 +72,9 @@ const snapshotRealmObject = (object, depth, maxDepth) => {
   // For each of its values, check if any are instances of Realm.Object
   // or Realm.List, and convert them recursively
   Object.keys(object).forEach((key) => {
-    if (object[key].constructor === RealmObject) {
+    if (object[key] && object[key].constructor === RealmObject) {
       unpackedObject[key] = snapshotRealmObject(object[key], depth + 1, maxDepth)
-    } else if (object[key].constructor === RealmList) {
+    } else if (object[key] && object[key].constructor === RealmList) {
       unpackedObject[key] = object[key].map(x => snapshotRealmObject(x, depth + 1, maxDepth))
     } else {
       unpackedObject[key] = object[key]
