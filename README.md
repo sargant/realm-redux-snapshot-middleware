@@ -71,11 +71,11 @@ all keys are optional:
   are unpacked as separate objects, up to this limit.
 * `requireMetaFlag` _(default false)_: if set to `true`, then your actions must
   have `meta.unpackRealm` set to a truthy value to be processed, e.g.:
-  ```javascript
-  // Using realmReduxSnapshot({ requireMetaFlag: true })
-  let action1 = { type: 'TEST', payload: foo } // will not be processed
-  let action2 = { type: 'TEST', payload: bar, meta: { unpackRealm: true }} // will be processed
-  ```
+```javascript
+// Using realmReduxSnapshot({ requireMetaFlag: true })
+let action1 = { type: 'TEST', payload: foo } // will not be processed
+let action2 = { type: 'TEST', payload: bar, meta: { unpackRealm: true }} // will be processed
+```
 
 ## Why?
 
