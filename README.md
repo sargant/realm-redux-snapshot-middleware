@@ -75,6 +75,7 @@ all keys are optional:
   // Using realmReduxSnapshot({ requireMetaFlag: true })
   let action1 = { type: 'TEST', payload: foo } // will not be processed
   let action2 = { type: 'TEST', payload: bar, meta: { unpackRealm: true }} // will be processed
+  ```
 
 ## Why?
 
