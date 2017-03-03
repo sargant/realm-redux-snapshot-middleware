@@ -69,6 +69,12 @@ all keys are optional:
 * `maxDepth` _(default 8)_: maximum depth to which to unpack elements,
   anything beyond this depth is `undefined`. Note that circular references
   are unpacked as separate objects, up to this limit.
+* `requireMetaFlag` _(default false)_: if set to `true`, then your actions must
+  have `meta.unpackRealm` set to a truthy value to be processed, e.g.:
+  ```javascript
+  // Using realmReduxSnapshot({ requireMetaFlag: true })
+  let action1 = { type: 'TEST', payload: foo } // will not be processed
+  let action2 = { type: 'TEST', payload: bar, meta: { unpackRealm: true }} // will be processed
 
 ## Why?
 

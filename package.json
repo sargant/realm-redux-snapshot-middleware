@@ -1,6 +1,6 @@
 {
   "name": "realm-redux-snapshot-middleware",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Redux middleware that converts action payloads from Realm.Results to simple javascript objects",
   "main": "./lib/realmReduxSnapshotMiddleware.js",
   "scripts": {

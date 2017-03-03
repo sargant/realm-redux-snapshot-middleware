@@ -96,7 +96,7 @@ const initRealm = () => {
 describe('realmReduxSnapshot', () => {
   // Create an instance of realm redux snapshot that passes an empty store
   // and has a next parameter that simply returns the action
-  const testMiddleware = (action) => realmReduxSnapshot()({})(x => x)(action)
+  const testMiddleware = (action, config = {}) => realmReduxSnapshot(config)({})(x => x)(action)
 
   before(() => {
     rimraf.sync('.testRealm')
@@ -194,6 +194,29 @@ describe('realmReduxSnapshot', () => {
       expect(result.payload.bird).to.deep.equal(bird)
       expect(result.payload.monkey).to.be.undefined
       expect(result.payload.isAZoo).to.be.true
+    })
+  })
+
+  describe('requireMetaFlag tests', () => {
+    it('should not convert if the requireMetaFlag is set and no meta flag is passed', () => {
+      let results = testRealm().objects('Dog')
+      let initialAction = { type: 'TEST', payload: results }
+      let result = testMiddleware(initialAction, { requireMetaFlag: true })
+      expect(result.payload.constructor).to.equal(Realm.Results)
+    })
+
+    it('should convert if the requireMetaFlag is set and an unpackRealm meta flag is passed', () => {
+      let results = testRealm().objects('Dog')
+      let initialAction = { type: 'TEST', payload: results, meta: { unpackRealm: true } }
+      let result = testMiddleware(initialAction, { requireMetaFlag: true })
+      expect(result.payload.constructor).to.equal(Array)
+    })
+
+    it('should not convert if the requireMetaFlag is set and the unpackRealm meta flag is passed with a falsy value', () => {
+      let results = testRealm().objects('Dog')
+      let initialAction = { type: 'TEST', payload: results, meta: { unpackRealm: false } }
+      let result = testMiddleware(initialAction, { requireMetaFlag: true })
+      expect(result.payload.constructor).to.equal(Realm.Results)
     })
   })
 

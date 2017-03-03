@@ -6,7 +6,8 @@ import {
 } from 'realm'
 
 const defaultConfig = {
-  maxDepth: 8
+  maxDepth: 8,
+  requireMetaFlag: false
 }
 
 /**
@@ -25,6 +26,14 @@ const realmReduxSnapshot = (incomingConfig) => () => (next) => (initialAction) =
   const config = {
     ...defaultConfig,
     ...incomingConfig
+  }
+
+  // If the "require meta flag" setting is set, and the action doesn't have
+  // the flag, take no action
+  if (config.requireMetaFlag) {
+    if (!initialAction.meta || !initialAction.meta.unpackRealm) {
+      return next(initialAction)
+    }
   }
 
   // Make a shallow clone of the action to avoid mutating the original
